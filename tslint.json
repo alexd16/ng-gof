@@ -86,7 +86,7 @@
     "prefer-const": true,
     "quotemark": [
       true,
-      "single"
+      "double"
     ],
     "radix": true,
     "semicolon": [
@@ -120,13 +120,13 @@
     "directive-selector": [
       true,
       "attribute",
-      "app",
+      "gof",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
-      "app",
+      "gof",
       "kebab-case"
     ],
     "no-output-on-prefix": true,
