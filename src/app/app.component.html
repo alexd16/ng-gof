@@ -1,20 +1,41 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<div class="p-4">
+  <div class="mb-2">
+    <div class="flex items-center mb-2">
+      <label class="w-48" for="">Number of Rows: </label>
+      <input type="number" [(ngModel)]="rows" class="p-1 border-2 border-grey-darker">
+    </div>
 
+    <div class="flex items-center mb-2">
+      <label class="w-48" for="">Number of Columns: </label>
+      <input type="number" [(ngModel)]="columns" class="p-1 border-2 border-grey-darker">
+    </div>
+
+    <div class="flex items-center">
+      <label class="w-48" for="">Time: </label>
+      <input type="number" [(ngModel)]="timer" class="p-1 border-2 border-grey-darker">
+    </div>
+  </div>
+  <div class="mb-2">
+    <div *ngFor="let column of columnsArray(); let y = index">
+      <div class="flex mb-px">
+        <div *ngFor="let row of rowsArray(); let x = index">    
+          <div class="mr-px h-6 w-6 p-px border border-grey-darker" (click)="toggleCell(x, y)">
+            <div class="w-full h-full bg-black rounded-full" [ngClass]="{ hidden: !isCellAliveAt(x, y) }">
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button (click)="start()"
+          class="bg-blue text-white px-4 py-2 rounded">Start</button>
+
+  <button (click)="stop()"
+          class="bg-blue text-white px-4 py-2 rounded">Stop</button>
+
+  <button (click)="resetWorld()"
+          class="bg-blue text-white px-4 py-2 rounded">Reset</button>
+</div>
