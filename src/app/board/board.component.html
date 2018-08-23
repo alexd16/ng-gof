@@ -1,0 +1,11 @@
+<div *ngFor="let column of columns; let y = index">
+  <div class="flex">
+    <div *ngFor="let row of rows; let x = index">    
+      <div class="h-6 w-6 border border-grey-darker" (click)="onCellClick(x, y)">
+        <div class="w-full h-full bg-black" [ngClass]="{ hidden: !isCellAliveAt(x, y) }">
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
