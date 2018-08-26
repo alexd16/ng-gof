@@ -2,14 +2,30 @@ import PointSet from "../point-collection/point-collection";
 import Point from "../point";
 
 export default class World {
-  constructor(private cells: PointSet) {}
+  constructor(
+    private cells: PointSet,
+    private neighbourhoodCount: Map<string, number>
+  ) {}
 
   static buildFrom(cells: Array<{ x: number; y: number }>) {
     const points = new PointSet();
+    const neighbourhoodCount = new Map<string, number>();
     cells.forEach(pointObj => {
-      points.add(new Point(pointObj.x, pointObj.y));
+      const newPoint = new Point(pointObj.x, pointObj.y);
+      points.add(newPoint);
+      World.addNeighbourhoodFor(neighbourhoodCount, newPoint);
     });
-    return new World(points);
+    return new World(points, neighbourhoodCount);
+  }
+
+  static addNeighbourhoodFor(
+    neighbourhoodCount: Map<string, number>,
+    p: Point
+  ) {
+    p.neighbourhood().forEach(neighbour => {
+      const currentCount = neighbourhoodCount.get(neighbour.toString()) || 0;
+      neighbourhoodCount.set(neighbour.toString(), currentCount + 1);
+    });
   }
 
   aliveCells() {
@@ -24,20 +40,23 @@ export default class World {
 
   nextGeneration() {
     const newCellSet = new PointSet();
-    const board = this.board();
-    board.forEach((isAlive, cell) => {
-      const numberOfNeighbours: number = this.cells.numberOfNeighboursFor(cell);
+    const newNeighbourhoodCount = new Map<string, number>();
+    this.neighbourhoodCount.forEach((numberOfNeighbours, pointString) => {
+      const point = Point.fromString(pointString);
+      const isAlive = this.cells.hasPoint(point);
       if (isAlive) {
         if (numberOfNeighbours === 2 || numberOfNeighbours === 3) {
-          newCellSet.add(cell);
+          newCellSet.add(point);
+          World.addNeighbourhoodFor(newNeighbourhoodCount, point);
         }
       } else {
         if (numberOfNeighbours === 3) {
-          newCellSet.add(cell);
+          newCellSet.add(point);
+          World.addNeighbourhoodFor(newNeighbourhoodCount, point);
         }
       }
     });
-    return new World(newCellSet);
+    return new World(newCellSet, newNeighbourhoodCount);
   }
 
   board(): Map<Point, boolean> {

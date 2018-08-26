@@ -16,18 +16,12 @@
       <input type="number" [(ngModel)]="timer" class="p-1 border-2 border-grey-darker">
     </div>
   </div>
-  <div class="mb-2">
-    <div *ngFor="let column of columnsArray(); let y = index">
-      <div class="flex mb-px">
-        <div *ngFor="let row of rowsArray(); let x = index">    
-          <div class="mr-px h-6 w-6 p-px border border-grey-darker" (click)="toggleCell(x, y)">
-            <div class="w-full h-full bg-black rounded-full" [ngClass]="{ hidden: !isCellAliveAt(x, y) }">
-
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="mb-4">
+    <!-- <gof-board [rows]="rows" [columns]="columns" [world]="world" (cellClick)="toggleCell($event)"></gof-board> -->
+    <gof-canvas-board [rows]="rows" [columns]="columns" [world]="world" (cellClick)="toggleCell($event)"></gof-canvas-board>
+    <p>
+      Generation: {{generation}}
+    </p>
   </div>
 
   <button (click)="start()"

@@ -9,13 +9,14 @@ import Point from "./logic/point";
   styleUrls: ["./app.component.css"],
 })
 export class AppComponent {
-  rows = 5;
-  columns = 5;
-  timer = 300;
+  rows = 120;
+  columns = 120;
+  timer = 1;
   title = "app";
   world = World.buildFrom([]);
   intervalHandler = null;
   started = false;
+  generation = 0;
 
   aliveCells = [];
 
@@ -26,6 +27,7 @@ export class AppComponent {
     this.started = true;
     this.intervalHandler = setInterval(() => {
       this.world = this.world.nextGeneration();
+      this.generation++;
     }, this.timer);
   }
 
@@ -53,7 +55,8 @@ export class AppComponent {
     return this.world.isCellAliveAt(point);
   }
 
-  toggleCell(x, y) {
+  toggleCell(event) {
+    const { x, y } = event;
     if (this.started) {
       return;
     }

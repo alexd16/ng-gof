@@ -16,15 +16,29 @@ import Point from "../logic/point";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BoardComponent implements OnInit {
-  @Input() rows;
-  @Input() columns;
-  @Input() world: World;
+  @Input()
+  rows: Array<any>;
 
-  @Output() cellClick = new EventEmitter();
+  @Input()
+  columns: Array<any>;
+
+  @Input()
+  world: World;
+
+  @Output()
+  cellClick = new EventEmitter();
 
   constructor() {}
 
   ngOnInit() {}
+
+  get columnsArray() {
+    return Array(this.columns);
+  }
+
+  get rowsArray() {
+    return Array(this.rows);
+  }
 
   isCellAliveAt(x, y) {
     return this.world.isCellAliveAt(new Point(x, y));
