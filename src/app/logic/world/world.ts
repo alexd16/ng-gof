@@ -3,29 +3,17 @@ import Point from "../point";
 
 export default class World {
   constructor(
-    private cells: PointSet,
-    private neighbourhoodCount: Map<string, number>
+    private cells: PointSet = new PointSet(),
+    private neighbourhoodCount: Map<string, number> = new Map<string, number>()
   ) {}
 
   static buildFrom(cells: Array<{ x: number; y: number }>) {
-    const points = new PointSet();
-    const neighbourhoodCount = new Map<string, number>();
+    const newWorld = new World();
     cells.forEach(pointObj => {
       const newPoint = new Point(pointObj.x, pointObj.y);
-      points.add(newPoint);
-      World.addNeighbourhoodFor(neighbourhoodCount, newPoint);
+      newWorld.addCell(newPoint);
     });
-    return new World(points, neighbourhoodCount);
-  }
-
-  static addNeighbourhoodFor(
-    neighbourhoodCount: Map<string, number>,
-    p: Point
-  ) {
-    p.neighbourhood().forEach(neighbour => {
-      const currentCount = neighbourhoodCount.get(neighbour.toString()) || 0;
-      neighbourhoodCount.set(neighbour.toString(), currentCount + 1);
-    });
+    return newWorld;
   }
 
   aliveCells() {
@@ -39,35 +27,29 @@ export default class World {
   }
 
   nextGeneration() {
-    const newCellSet = new PointSet();
-    const newNeighbourhoodCount = new Map<string, number>();
+    const newWorld = new World();
     this.neighbourhoodCount.forEach((numberOfNeighbours, pointString) => {
       const point = Point.fromString(pointString);
       const isAlive = this.cells.hasPoint(point);
       if (isAlive) {
         if (numberOfNeighbours === 2 || numberOfNeighbours === 3) {
-          newCellSet.add(point);
-          World.addNeighbourhoodFor(newNeighbourhoodCount, point);
+          newWorld.addCell(point);
         }
       } else {
         if (numberOfNeighbours === 3) {
-          newCellSet.add(point);
-          World.addNeighbourhoodFor(newNeighbourhoodCount, point);
+          newWorld.addCell(point);
         }
       }
     });
-    return new World(newCellSet, newNeighbourhoodCount);
+    return newWorld;
   }
 
-  board(): Map<Point, boolean> {
-    const { topLeft, bottomRight } = this.cells.boundingBox(1);
-    const board = new Map<Point, boolean>();
-    for (let y = topLeft.y; y <= bottomRight.y; y++) {
-      for (let x = topLeft.x; x <= bottomRight.x; x++) {
-        const p = new Point(x, y);
-        board.set(p, this.cells.hasPoint(p));
-      }
-    }
-    return board;
+  addCell(p: Point) {
+    this.cells.add(p);
+    p.neighbourhood().forEach(neighbour => {
+      const currentCount =
+        this.neighbourhoodCount.get(neighbour.toString()) || 0;
+      this.neighbourhoodCount.set(neighbour.toString(), currentCount + 1);
+    });
   }
 }

@@ -1,4 +1,5 @@
 export default class Point {
+  private _neighbourhood: Point[] = null;
   constructor(public x: number, public y: number) {}
 
   static fromString(string): Point {
@@ -18,15 +19,20 @@ export default class Point {
   }
 
   neighbourhood(): Point[] {
-    const neighbourhood = [];
-    for (let x = this.x - 1; x <= this.x + 1; x++) {
-      for (let y = this.y - 1; y <= this.y + 1; y++) {
-        const p = new Point(x, y);
-        if (!this.equalTo(p)) {
-          neighbourhood.push(p);
-        }
-      }
+    if (this._neighbourhood) {
+      return this._neighbourhood;
     }
-    return neighbourhood;
+    const { x, y } = this;
+    this._neighbourhood = [
+      new Point(x - 1, y - 1),
+      new Point(x, y - 1),
+      new Point(x + 1, y - 1),
+      new Point(x - 1, y),
+      new Point(x + 1, y),
+      new Point(x - 1, y + 1),
+      new Point(x, y + 1),
+      new Point(x + 1, y + 1),
+    ];
+    return this._neighbourhood;
   }
 }
