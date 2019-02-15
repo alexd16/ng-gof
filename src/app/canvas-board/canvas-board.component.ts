@@ -28,7 +28,7 @@ export class CanvasBoardComponent implements OnInit, OnChanges, AfterViewInit {
   gridHeight = 0;
   padding = 0;
 
-  squareSize = 4;
+  squareSize = 8;
 
   @Input()
   world: World;

@@ -18,6 +18,18 @@ export default class Point {
     return this.x === otherPoint.x && this.y === otherPoint.y;
   }
 
+  translateX(offset: number) {
+    return new Point(this.x + offset, this.y);
+  }
+
+  translateY(offset: number) {
+    return new Point(this.x, this.y + offset);
+  }
+
+  translate(offsetX: number, offsetY: number) {
+    return this.translateX(offsetX).translateY(offsetY);
+  }
+
   neighbourhood(): Point[] {
     if (this._neighbourhood) {
       return this._neighbourhood;
@@ -36,3 +48,7 @@ export default class Point {
     return this._neighbourhood;
   }
 }
+
+export const makePoint = (x: number, y: number) => {
+  return new Point(x, y);
+};
